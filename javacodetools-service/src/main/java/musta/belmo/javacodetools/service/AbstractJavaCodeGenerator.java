@@ -5,6 +5,7 @@ import com.github.javaparser.ast.CompilationUnit;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.io.OutputStream;
 import java.nio.file.Path;
 
 public abstract class AbstractJavaCodeGenerator {
@@ -22,6 +23,10 @@ public abstract class AbstractJavaCodeGenerator {
 
     public CompilationUnit generate(Path code) throws IOException {
         return generate(JavaParser.parse(code));
+
+    }
+
+    public void writeTo(OutputStream outputStream) {
 
     }
 

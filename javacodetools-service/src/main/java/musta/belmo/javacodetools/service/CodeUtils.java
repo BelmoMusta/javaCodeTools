@@ -314,4 +314,22 @@ public class CodeUtils {
         }
         return defaultValue;
     }
+
+    public static String toLowerCaseFirstLetter(String input) {
+        String retValue;
+        if (StringUtils.isBlank(input)) {
+            retValue = input;
+        } else
+            retValue = Character.toLowerCase(input.charAt(0)) + input.substring(1);
+        return retValue;
+    }
+
+    public static String getSimpleClassName(String fullClassName) {
+        String lRet = fullClassName;
+        if (fullClassName != null && fullClassName.contains(".")) {
+            lRet = fullClassName.substring(fullClassName.lastIndexOf('.') + 1);
+        }
+        return lRet;
+    }
+
 }

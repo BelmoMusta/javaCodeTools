@@ -1,10 +1,10 @@
-package musta.belmo.javacodetools.service.gui;
+package musta.belmo.javacodetools.service;
 
 import javafx.scene.control.Label;
 import javafx.scene.layout.Pane;
-import musta.belmo.javacodetools.service.gui.annotations.ComboBox;
-import musta.belmo.javacodetools.service.gui.annotations.TextArea;
-import musta.belmo.javacodetools.service.gui.annotations.TextField;
+import musta.belmo.javacodetools.service.annotations.ComboBox;
+import musta.belmo.javacodetools.service.annotations.TextArea;
+import musta.belmo.javacodetools.service.annotations.TextField;
 
 import java.lang.reflect.Field;
 import java.util.Collection;
@@ -15,7 +15,7 @@ public class Binder {
         final Pane pane;
 
         Class<?> elementClass = element.getClass();
-        if (elementClass.isAnnotationPresent(musta.belmo.javacodetools.service.gui.annotations.Pane.class)) {
+        if (elementClass.isAnnotationPresent(musta.belmo.javacodetools.service.annotations.Pane.class)) {
             pane = new Pane();
             Field[] declaredFields = elementClass.getDeclaredFields();
             for (Field declaredField : declaredFields) {

@@ -1,4 +1,4 @@
-package musta.belmo.javacodetools.service.gui.annotations;
+package musta.belmo.javacodetools.service.annotations;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
@@ -7,8 +7,8 @@ import java.lang.annotation.Target;
 
 @Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.FIELD)
-public @interface ComboBox {
-    int size() default 0;
+public @interface TextArea {
     String name();
+
     String label() default "";
 }

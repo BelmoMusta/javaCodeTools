@@ -1,4 +1,4 @@
-package musta.belmo.javacodetools.service.gui.controls;
+package musta.belmo.javacodetools.service.controls;
 
 import javafx.scene.control.*;
 import javafx.scene.layout.BorderPane;

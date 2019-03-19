@@ -1,4 +1,4 @@
-package musta.belmo.javacodetools.service.gui.controls;
+package musta.belmo.javacodetools.service.controls;
 
 import javafx.scene.control.MenuItem;
 import org.kordamp.ikonli.fontawesome.FontAwesome;

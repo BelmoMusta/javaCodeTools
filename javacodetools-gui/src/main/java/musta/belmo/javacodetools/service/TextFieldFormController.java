@@ -1,7 +1,7 @@
-package musta.belmo.javacodetools.service.gui;
+package musta.belmo.javacodetools.service;
 
-import musta.belmo.javacodetools.service.gui.annotations.Pane;
-import musta.belmo.javacodetools.service.gui.annotations.TextField;
+import musta.belmo.javacodetools.service.annotations.Pane;
+import musta.belmo.javacodetools.service.annotations.TextField;
 
 @Pane
 public class TextFieldFormController {

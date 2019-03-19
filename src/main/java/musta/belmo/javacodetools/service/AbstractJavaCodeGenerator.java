@@ -1,4 +1,4 @@
-package musta.belmo.javacodetools;
+package musta.belmo.javacodetools.service;
 
 import com.github.javaparser.JavaParser;
 import com.github.javaparser.ast.CompilationUnit;

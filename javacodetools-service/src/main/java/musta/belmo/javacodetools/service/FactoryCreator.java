@@ -11,7 +11,7 @@ import com.github.javaparser.ast.stmt.ReturnStmt;
 import java.util.List;
 import java.util.function.Predicate;
 
-public class FactoryCreator extends AbstractJavaCodeGenerator {
+public class FactoryCreator extends AbstractJavaCodeTools {
     private static final Predicate<MethodDeclaration> IS_NOT_VOID = aMethod -> !aMethod.getType().isVoidType();
 
     @Override

@@ -21,7 +21,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.function.Predicate;
 
-public class InterfaceImplementation extends AbstractJavaCodeGenerator {
+public class InterfaceImplementation extends AbstractJavaCodeTools {
     private static final Predicate<MethodDeclaration> IS_SET = aMethod -> aMethod.getNameAsString().length() > 3
             && aMethod.getName().toString().startsWith("set")
             && aMethod.getParameters().size() == 1;

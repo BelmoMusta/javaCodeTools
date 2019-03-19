@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"  ?>
 
 <?import musta.belmo.javacodetools.service.controls.MustaPane?>
-<MustaPane fx:id="mustaPane" fx:controller="musta.belmo.javacodetools.service.MappingGuiController"
+<MustaPane fx:id="mustaPane" fx:controller="musta.belmo.javacodetools.service.JavaCodeToolsController"
            xmlns:fx="http://javafx.com/fxml/1"></MustaPane>
 

@@ -18,7 +18,7 @@ import java.util.stream.Stream;
 /**
  * Generates Fields from gettes
  */
-public class FieldsFromGetters extends AbstractJavaCodeGenerator {
+public class FieldsFromGetters extends AbstractJavaCodeTools {
     public CompilationUnit generate(CompilationUnit compilationUnitSrc) {
         CompilationUnit compilationUnit = compilationUnitSrc.clone();
         compilationUnit.findAll(ClassOrInterfaceDeclaration.class).forEach(aClass -> {

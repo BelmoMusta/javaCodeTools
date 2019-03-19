@@ -5,14 +5,15 @@ import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.ast.Modifier;
 import com.github.javaparser.ast.NodeList;
 import com.github.javaparser.ast.PackageDeclaration;
-import com.github.javaparser.ast.body.*;
+import com.github.javaparser.ast.body.ClassOrInterfaceDeclaration;
+import com.github.javaparser.ast.body.MethodDeclaration;
+import com.github.javaparser.ast.body.Parameter;
+import com.github.javaparser.ast.body.VariableDeclarator;
 import com.github.javaparser.ast.expr.*;
 import com.github.javaparser.ast.stmt.BlockStmt;
 import com.github.javaparser.ast.stmt.IfStmt;
 import com.github.javaparser.ast.stmt.ReturnStmt;
 import com.github.javaparser.ast.type.ClassOrInterfaceType;
-
-import musta.belmo.javacodetools.service.CodeUtils;
 import org.apache.commons.lang3.StringUtils;
 
 import java.util.LinkedHashMap;
@@ -20,7 +21,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
-public class MappingGenerator {
+public class MappingGenerator extends AbstractJavaCodeTools {
     private CompilationUnit source;
     private String destinationClassName;
     private String destinationPackage;
@@ -234,5 +235,10 @@ public class MappingGenerator {
 
     public void mapField(String oldField, String newField) {
         fieldsMapper.put(oldField, newField);
+    }
+
+    @Override
+    public CompilationUnit generate(CompilationUnit code) {
+        return result;
     }
 }

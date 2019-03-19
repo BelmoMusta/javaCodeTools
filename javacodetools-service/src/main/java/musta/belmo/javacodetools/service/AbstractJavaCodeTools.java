@@ -8,7 +8,7 @@ import java.io.IOException;
 import java.io.OutputStream;
 import java.nio.file.Path;
 
-public abstract class AbstractJavaCodeGenerator {
+public abstract class AbstractJavaCodeTools {
 
     public abstract CompilationUnit generate(CompilationUnit code);
 

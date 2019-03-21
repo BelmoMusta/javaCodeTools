@@ -45,9 +45,10 @@ public class JavaCodeToolsController {
             mappingGenerator.setStaticMethod(true);
             mappingGenerator.setAccessCollectionByGetter(true);
             mappingGenerator.createMapper();
+            mustaPane.setText(mappingGenerator.getResult());
         });
 
-        bindServiceTuButton(generateOnDemandeHolder, new GenerateOnDemandeHolderPattern());
+        bindServiceTuButton(generateOnDemandeHolder, new GenerateOnDemandHolderPattern());
 
         mustaPane.addMenuGroup("File");
         mustaPane.addMenuItemToGroup("Save", "File");

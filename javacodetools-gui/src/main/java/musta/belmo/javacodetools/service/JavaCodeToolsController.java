@@ -20,6 +20,7 @@ public class JavaCodeToolsController {
         CustomButton generateMapper = mustaPane.addButton("generate mapper", "fa-save", "Generate mapper");
         CustomButton deriveInterface = mustaPane.addButton("derive interface", "fa-fire", "Derive interface");
         CustomButton generateOnDemandeHolder = mustaPane.addButton("ODH pattern", "fa-fire", "Generate ODH pattern");
+        CustomButton generateSafeAccessor = mustaPane.addButton("safe accessors", "fa-fire", "Generate safe accessors");
         CustomButton generateFactory = mustaPane.addButton("Generate Factory", "fa-fire", "Generate Factory");
         CustomButton generateFieldFromGetter = mustaPane.addButton("Generate Fields from getters", "fa-fire", "Generate Fileds");
 
@@ -49,6 +50,7 @@ public class JavaCodeToolsController {
         });
 
         bindServiceTuButton(generateOnDemandeHolder, new GenerateOnDemandHolderPattern());
+        bindServiceTuButton(generateSafeAccessor, new ObjectSafeAccessor());
 
         mustaPane.addMenuGroup("File");
         mustaPane.addMenuItemToGroup("Save", "File");

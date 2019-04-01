@@ -7,6 +7,7 @@ import com.github.javaparser.ast.body.MethodDeclaration;
 import com.github.javaparser.ast.expr.ObjectCreationExpr;
 import com.github.javaparser.ast.stmt.BlockStmt;
 import com.github.javaparser.ast.stmt.ReturnStmt;
+import com.github.javaparser.ast.type.Type;
 
 import java.util.List;
 import java.util.function.Predicate;
@@ -26,7 +27,10 @@ public class FactoryCreator extends AbstractJavaCodeTools {
                         BlockStmt blockStmt = new BlockStmt();
                         aMethod.setBody(blockStmt);
                         ObjectCreationExpr objectCreationExpr = new ObjectCreationExpr();
-                        objectCreationExpr.setType(aMethod.getType().toString());
+                        Type type = aMethod.getType();
+                        if (!type.isPrimitiveType()) {
+                            objectCreationExpr.setType(type.toString());
+                        }
                         ReturnStmt returnStmt = new ReturnStmt(objectCreationExpr);
                         blockStmt.addStatement(returnStmt);
                     });

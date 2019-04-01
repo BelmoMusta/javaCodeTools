@@ -2,23 +2,17 @@ package musta.belmo.javacodetools.service;
 
 import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.ast.Modifier;
-import com.github.javaparser.ast.NodeList;
 import com.github.javaparser.ast.body.*;
-import com.github.javaparser.ast.comments.LineComment;
 import com.github.javaparser.ast.expr.*;
 import com.github.javaparser.ast.stmt.BlockStmt;
 import com.github.javaparser.ast.stmt.IfStmt;
-import com.github.javaparser.ast.stmt.ReturnStmt;
 import com.github.javaparser.ast.type.ClassOrInterfaceType;
 import com.github.javaparser.ast.type.PrimitiveType;
 import com.github.javaparser.ast.type.Type;
-import com.github.javaparser.ast.type.TypeParameter;
-import com.github.javaparser.javadoc.Javadoc;
-import com.github.javaparser.javadoc.description.JavadocDescription;
-import com.github.javaparser.javadoc.description.JavadocDescriptionElement;
-import com.github.javaparser.javadoc.description.JavadocSnippet;
 import org.apache.commons.lang3.StringUtils;
 
+import java.io.OutputStream;
+import java.io.PrintWriter;
 import java.util.*;
 import java.util.stream.IntStream;
 import java.util.stream.Stream;
@@ -162,13 +156,11 @@ public class CodeUtils {
     }
 
 
-
     /**
-     *
      * @param classOrInterfaceDeclaration
      */
     public static void deletFields(ClassOrInterfaceDeclaration classOrInterfaceDeclaration) {
-        classOrInterfaceDeclaration.getMembers().removeIf(member->member instanceof FieldDeclaration);
+        classOrInterfaceDeclaration.getMembers().removeIf(member -> member instanceof FieldDeclaration);
     }
 
     public static FieldDeclaration newField(Type type, String name, Modifier... modifiers) {
@@ -271,7 +263,7 @@ public class CodeUtils {
 
     }
 
-    public  static <T> Stream<T> reverse(Stream<T> input) {
+    public static <T> Stream<T> reverse(Stream<T> input) {
         Object[] temp = input.toArray();
         return (Stream<T>) IntStream.range(0, temp.length)
                 .mapToObj(i -> temp[temp.length - i - 1]);
@@ -330,6 +322,49 @@ public class CodeUtils {
             lRet = fullClassName.substring(fullClassName.lastIndexOf('.') + 1);
         }
         return lRet;
+    }
+
+    /**
+     * uncapitalize the inout String
+     *
+     * @param input {@link String}
+     * @return String
+     */
+    public static String unCapitalize(String input) {
+        String output = input;
+        if (input != null && !input.isEmpty()) {
+            output = Character.toLowerCase(input.charAt(0)) +
+                    input.substring(1);
+        }
+        return output;
+    }
+
+    /**
+     * uncapitalize the inout String
+     *
+     * @param input {@link String}
+     * @return String
+     */
+    public static String capitalize(String input) {
+        String output = input;
+        if (input != null && !input.isEmpty()) {
+            output = Character.toUpperCase(input.charAt(0)) +
+                    input.substring(1);
+        }
+        return output;
+    }
+
+    /**
+     * Writes the compilation unit to the given output
+     *
+     * @param resultUnit {@link CompilationUnit}
+     * @param out        {@link OutputStream}
+     */
+    public static void writeToOutput(CompilationUnit resultUnit, OutputStream out) {
+        final PrintWriter printWriter = new PrintWriter(out);
+        printWriter.write(resultUnit.toString());
+        printWriter.flush();
+        printWriter.close();
     }
 
 }

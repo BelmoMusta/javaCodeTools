@@ -4,6 +4,7 @@ import com.github.javaparser.ast.CompilationUnit;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
+import javafx.scene.control.Button;
 import javafx.scene.control.TextInputDialog;
 import musta.belmo.javacodetools.service.controls.CustomButton;
 import musta.belmo.javacodetools.service.controls.MustaPane;
@@ -11,7 +12,7 @@ import org.apache.commons.lang3.StringUtils;
 
 import java.util.Optional;
 
-public class JavaCodeToolsController {
+public class JavaCodeToolsController implements ButtonBinder {
     @FXML
     public MustaPane mustaPane;
 
@@ -56,15 +57,17 @@ public class JavaCodeToolsController {
         mustaPane.addMenuItemToGroup("Save", "File");
     }
 
-    private void bindServiceTuButton(CustomButton generateFieldFromGetter, AbstractJavaCodeTools toolService) {
-        generateFieldFromGetter.setOnAction(event -> {
+    @Override
+    public void bindServiceTuButton(Button button, AbstractJavaCodeTools toolService) {
+        button.setOnAction(event -> {
             CompilationUnit compilationUnit = toolService
                     .generate(mustaPane.getTextArea().getText());
             mustaPane.setText(compilationUnit);
         });
     }
 
-    private void bindServiceTuButton(CustomButton generateFieldFromGetter, EventHandler<ActionEvent> event) {
-        generateFieldFromGetter.setOnAction(event);
+    @Override
+    public void bindServiceTuButton(Button button, EventHandler<ActionEvent> event) {
+        button.setOnAction(event);
     }
 }

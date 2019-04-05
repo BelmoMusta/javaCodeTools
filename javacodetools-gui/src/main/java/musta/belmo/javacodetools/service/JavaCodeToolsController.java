@@ -20,15 +20,17 @@ public class JavaCodeToolsController implements ButtonBinder {
     public void initialize() {
         CustomButton generateMapper = mustaPane.addButton("generate mapper", "fa-save", "Generate mapper");
         CustomButton deriveInterface = mustaPane.addButton("derive interface", "fa-fire", "Derive interface");
-        CustomButton generateOnDemandeHolder = mustaPane.addButton("ODH pattern", "fa-fire", "Generate ODH pattern");
+        CustomButton generateOnDemandHolder = mustaPane.addButton("ODH pattern", "fa-fire", "Generate ODH pattern");
         CustomButton generateSafeAccessor = mustaPane.addButton("safe accessors", "fa-fire", "Generate safe accessors");
         CustomButton generateFactory = mustaPane.addButton("Generate Factory", "fa-fire", "Generate Factory");
         CustomButton generateFieldFromGetter = mustaPane.addButton("Generate Fields from getters", "fa-fire", "Generate Fileds");
+        CustomButton generateTests = mustaPane.addButton("Generate tests for this class", "fa-fire", "Generate Tests");
 
 
         bindServiceTuButton(deriveInterface, new InterfaceDeriver());
         bindServiceTuButton(generateFactory, new FactoryCreator());
         bindServiceTuButton(generateFieldFromGetter, new FieldsFromGetters());
+        bindServiceTuButton(generateTests, new TestGenerator());
 
 
         bindServiceTuButton(generateMapper, event -> {
@@ -50,7 +52,7 @@ public class JavaCodeToolsController implements ButtonBinder {
             mustaPane.setText(mappingGenerator.getResult());
         });
 
-        bindServiceTuButton(generateOnDemandeHolder, new GenerateOnDemandHolderPattern());
+        bindServiceTuButton(generateOnDemandHolder, new GenerateOnDemandHolderPattern());
         bindServiceTuButton(generateSafeAccessor, new ObjectSafeAccessor());
 
         mustaPane.addMenuGroup("File");

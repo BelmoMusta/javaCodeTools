@@ -14,6 +14,7 @@ import org.apache.commons.lang3.StringUtils;
 import java.io.OutputStream;
 import java.io.PrintWriter;
 import java.util.*;
+import java.util.function.Predicate;
 import java.util.stream.IntStream;
 import java.util.stream.Stream;
 
@@ -22,6 +23,13 @@ import static java.util.stream.Collectors.toCollection;
 public class CodeUtils {
 
     private static final String STRING_BUILDER = "StringBuilder";
+    public static final Predicate<MethodDeclaration> IS_GETTER = aMethod -> aMethod.getName().toString().startsWith("get") && aMethod.getParameters().isEmpty();
+    public static final Predicate<MethodDeclaration> IS_BOOLEAN_ACCESSOR = aMethod -> aMethod.getName().toString().startsWith("is");
+    public static final Predicate<MethodDeclaration> IS_VOID = aMethod -> aMethod.getType().isVoidType();
+    public static final Predicate<MethodDeclaration> IS_SETTER = aMethod -> aMethod.getNameAsString().length() > 3
+            && aMethod.getName().toString().startsWith("set")
+            && aMethod.getParameters().size() == 1;
+    public static final Predicate<MethodDeclaration> IS_NORMAL_METHOD = IS_BOOLEAN_ACCESSOR.negate().and(IS_GETTER.negate()).and(IS_SETTER.negate());
 
     public static ObjectCreationExpr objectCreationExpFromType(final ClassOrInterfaceType destClassType) {
         final ObjectCreationExpr objectCreationExpr = new ObjectCreationExpr();
@@ -367,4 +375,9 @@ public class CodeUtils {
         printWriter.close();
     }
 
+    public static <T> Stream<T> reversedStream(Stream<T> input) {
+        Object[] temp = input.toArray();
+        return (Stream<T>) IntStream.range(0, temp.length)
+                .mapToObj(i -> temp[temp.length - i - 1]);
+    }
 }

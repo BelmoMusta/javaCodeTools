@@ -5,22 +5,33 @@ import javafx.scene.layout.Pane;
 import musta.belmo.javacodetools.service.annotations.ComboBox;
 import musta.belmo.javacodetools.service.annotations.TextArea;
 import musta.belmo.javacodetools.service.annotations.TextField;
-
 import java.lang.reflect.Field;
 import java.util.Collection;
 
+/**
+ * TODO: Complete the description of this class
+ *
+ * @author default author
+ * @since 0.0.0.SNAPSHOT
+ * @version 0.0.0
+ */
 public class Binder {
 
+    /**
+     * TODO: Complete the description of this method
+     *
+     * @param element {@link T}
+     * @return Pane
+     * @throws Exception the raised exception if error.
+     */
     public <T> Pane bind(T element) throws Exception {
         final Pane pane;
-
         Class<?> elementClass = element.getClass();
         if (elementClass.isAnnotationPresent(musta.belmo.javacodetools.service.annotations.Pane.class)) {
             pane = new Pane();
             Field[] declaredFields = elementClass.getDeclaredFields();
             for (Field declaredField : declaredFields) {
                 declaredField.setAccessible(true);
-
                 Object o = declaredField.get(element);
                 if (declaredField.isAnnotationPresent(TextField.class)) {
                     TextField textFieldAnnotation = declaredField.getAnnotation(TextField.class);
@@ -52,9 +63,8 @@ public class Binder {
                     pane.getChildren().add(comboBox);
                 }
             }
-        } else throw new Exception("the object cannot be bound");
-
+        } else
+            throw new Exception("the object cannot be bound");
         return pane;
-
     }
 }

@@ -6,14 +6,27 @@ import javafx.scene.Scene;
 import javafx.stage.Stage;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
 import java.io.IOException;
 import java.net.URL;
 
+/**
+ * TODO: Complete the description of this class
+ *
+ * @author default author
+ * @since 0.0.0.SNAPSHOT
+ * @version 0.0.0
+ */
 public abstract class AbstractJavaFXApplication extends Application {
-    public abstract URL loadFXMLFile();
+
     /**
-     * La constante {@link #LOG} de type {@link Logger} ayant la valeur LoggerFactory.getLogger(TableCounterGUI.class).
+     * Load fxml file
+     *
+     * @return URL
+     */
+    public abstract URL loadFXMLFile();
+
+    /**
+     * The {@link #LOG} Constant of type {@link Logger} holding the value LoggerFactory.getLogger(AbstractJavaFXApplication.class).
      */
     private static final Logger LOG = LoggerFactory.getLogger(AbstractJavaFXApplication.class);
 

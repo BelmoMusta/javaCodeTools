@@ -7,7 +7,18 @@ import com.github.javaparser.ast.expr.MarkerAnnotationExpr;
 import com.github.javaparser.ast.visitor.VoidVisitorAdapter;
 import musta.belmo.javacodetools.service.CodeUtils;
 
+/**
+ * TODO: Complete the description of this class
+ *
+ * @author default author
+ * @since 0.0.0.SNAPSHOT
+ * @version 0.0.0
+ */
 public class TestMethodsVisitor extends VoidVisitorAdapter<ClassOrInterfaceDeclaration> {
+
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void visit(MethodDeclaration methodDeclaration, ClassOrInterfaceDeclaration arg) {
         if (!methodDeclaration.isPrivate()) {

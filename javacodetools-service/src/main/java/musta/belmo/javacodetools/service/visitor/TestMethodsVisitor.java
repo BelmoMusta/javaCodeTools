@@ -1,10 +1,11 @@
-package musta.belmo.javacodetools.service;
+package musta.belmo.javacodetools.service.visitor;
 
 import com.github.javaparser.ast.body.ClassOrInterfaceDeclaration;
 import com.github.javaparser.ast.body.MethodDeclaration;
 import com.github.javaparser.ast.expr.AnnotationExpr;
 import com.github.javaparser.ast.expr.MarkerAnnotationExpr;
 import com.github.javaparser.ast.visitor.VoidVisitorAdapter;
+import musta.belmo.javacodetools.service.CodeUtils;
 
 public class TestMethodsVisitor extends VoidVisitorAdapter<ClassOrInterfaceDeclaration> {
     @Override

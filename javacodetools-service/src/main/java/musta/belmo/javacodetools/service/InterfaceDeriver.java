@@ -2,6 +2,7 @@ package musta.belmo.javacodetools.service;
 
 import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.ast.Modifier;
+import com.github.javaparser.ast.NodeList;
 import com.github.javaparser.ast.body.BodyDeclaration;
 import com.github.javaparser.ast.body.ClassOrInterfaceDeclaration;
 import com.github.javaparser.ast.body.FieldDeclaration;
@@ -13,21 +14,22 @@ import java.util.Optional;
 public class InterfaceDeriver extends AbstractJavaCodeTools {
 
 
-    public CompilationUnit generate(CompilationUnit src) {
-        CompilationUnit lRet = src.clone();
+    public CompilationUnit generate(CompilationUnit srcCompilationUnit) {
+        CompilationUnit destCompilationUnit = srcCompilationUnit.clone();
+        for (ClassOrInterfaceDeclaration aClass : destCompilationUnit.findAll(ClassOrInterfaceDeclaration.class)) {
+            aClass.setInterface(true);
+            aClass.removeModifier(Modifier.FINAL);
+            aClass.getImplementedTypes().clear();
+            NodeList<BodyDeclaration<?>> members = aClass.getMembers();
 
-        for (ClassOrInterfaceDeclaration classOrInterfaceDeclaration : lRet.findAll(ClassOrInterfaceDeclaration.class)) {
-            classOrInterfaceDeclaration.setInterface(true);
-            classOrInterfaceDeclaration.removeModifier(Modifier.FINAL);
-            classOrInterfaceDeclaration.getImplementedTypes().clear();
-            classOrInterfaceDeclaration.getMembers().removeIf(BodyDeclaration::isConstructorDeclaration);
-            classOrInterfaceDeclaration.getMembers().removeIf(BodyDeclaration::isFieldDeclaration);
-            classOrInterfaceDeclaration.getMembers().removeIf(BodyDeclaration::isClassOrInterfaceDeclaration);
-            classOrInterfaceDeclaration.getMembers().removeIf(dec -> dec.isMethodDeclaration()
+            members.removeIf(BodyDeclaration::isConstructorDeclaration);
+            members.removeIf(BodyDeclaration::isFieldDeclaration);
+            members.removeIf(BodyDeclaration::isClassOrInterfaceDeclaration);
+            members.removeIf(dec -> dec.isMethodDeclaration()
                     && (dec.asMethodDeclaration().isStatic() || dec.asMethodDeclaration().isPrivate()));
 
-            classOrInterfaceDeclaration.setName("I" + classOrInterfaceDeclaration.getNameAsString());
-            for (MethodDeclaration methodDeclaration : classOrInterfaceDeclaration.findAll(MethodDeclaration.class)) {
+            aClass.setName("I" + aClass.getNameAsString());
+            for (MethodDeclaration methodDeclaration : aClass.findAll(MethodDeclaration.class)) {
                 Optional<AnnotationExpr> override = methodDeclaration.getAnnotationByName("Override");
                 if (override.isPresent()) {
                     override.get().remove();
@@ -36,11 +38,11 @@ public class InterfaceDeriver extends AbstractJavaCodeTools {
                 methodDeclaration.setBody(null);
                 methodDeclaration.setPublic(false);
             }
-            classOrInterfaceDeclaration.getImplementedTypes().clear();
-            classOrInterfaceDeclaration.getExtendedTypes().clear();
-            deleteFields(classOrInterfaceDeclaration);
+            aClass.getImplementedTypes().clear();
+            aClass.getExtendedTypes().clear();
+            deleteFields(aClass);
         }
-        return lRet;
+        return destCompilationUnit;
     }
 
 

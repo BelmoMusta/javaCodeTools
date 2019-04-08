@@ -26,6 +26,8 @@ public class CodeUtils {
     public static final Predicate<MethodDeclaration> IS_GETTER = aMethod -> aMethod.getName().toString().startsWith("get") && aMethod.getParameters().isEmpty();
     public static final Predicate<MethodDeclaration> IS_BOOLEAN_ACCESSOR = aMethod -> aMethod.getName().toString().startsWith("is");
     public static final Predicate<MethodDeclaration> IS_VOID = aMethod -> aMethod.getType().isVoidType();
+    public static final Predicate<MethodDeclaration> IS_NOT_PRIVATE = aMethod -> !aMethod.isPrivate();
+
     public static final Predicate<MethodDeclaration> IS_SETTER = aMethod -> aMethod.getNameAsString().length() > 3
             && aMethod.getName().toString().startsWith("set")
             && aMethod.getParameters().size() == 1;

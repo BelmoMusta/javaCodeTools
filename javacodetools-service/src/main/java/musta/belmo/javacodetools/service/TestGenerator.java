@@ -11,10 +11,15 @@ public class TestGenerator extends AbstractJavaCodeTools {
     @Override
     public CompilationUnit generate(CompilationUnit compilationUnit) {
         final CompilationUnit resultUnit = new CompilationUnit();
+
         List<ClassOrInterfaceDeclaration> classes = compilationUnit.findAll(ClassOrInterfaceDeclaration.class);
-        classes.forEach(srcClass -> {
-            srcClass.accept(new MethodVisitor(), null);
+        resultUnit.addImport("org.junit.Test");
+
+        classes.forEach(aClass -> {
+            ClassOrInterfaceDeclaration destClass = resultUnit.addClass(aClass.getNameAsString() + "Test");
+            aClass.accept(new TestMethodsVisitor(), destClass);
         });
+
         return resultUnit;
     }
 

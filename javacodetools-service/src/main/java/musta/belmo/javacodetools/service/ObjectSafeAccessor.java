@@ -76,7 +76,7 @@ public class ObjectSafeAccessor extends AbstractJavaCodeTools {
         variableDeclarationExpr.addVariable(variableDeclarator);
         methodDeclaration.getBody().ifPresent(blockStmt -> blockStmt.addStatement(variableDeclarationExpr));
 
-        return convertStringToNameExpression(variableName);
+        return variableDeclarator.getNameAsExpression();
     }
 
     private void addReturnStatement(BlockStmt body, NameExpr variableName) {
@@ -159,10 +159,4 @@ public class ObjectSafeAccessor extends AbstractJavaCodeTools {
     private NameExpr getFieldAsExpression(FieldDeclaration field) {
         return new NameExpr("this." + field.getVariable(0).getNameAsString());
     }
-
-    private NameExpr convertStringToNameExpression(String expression) {
-        return new NameExpr(expression);
-    }
-
-
 }

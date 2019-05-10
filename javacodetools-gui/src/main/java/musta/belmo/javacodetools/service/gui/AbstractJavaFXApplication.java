@@ -2,10 +2,12 @@ package musta.belmo.javacodetools.service.gui;
 
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
 import java.io.IOException;
 import java.net.URL;
 
@@ -13,8 +15,8 @@ import java.net.URL;
  * TODO: Complete the description of this class
  *
  * @author default author
- * @since 0.0.0.SNAPSHOT
  * @version 0.0.0
+ * @since 0.0.0.SNAPSHOT
  */
 public abstract class AbstractJavaFXApplication extends Application {
 
@@ -36,8 +38,13 @@ public abstract class AbstractJavaFXApplication extends Application {
     @Override
     public void start(Stage primaryStage) throws IOException {
         LOG.info("start ");
-        FXMLLoader fxmlLoader = new FXMLLoader(loadFXMLFile());
-        primaryStage.setScene(new Scene(fxmlLoader.load(), 800, 500));
+        final FXMLLoader fxmlLoader = new FXMLLoader(loadFXMLFile());
+        final Parent root = fxmlLoader.load();
+
+        final PrimaryStageBridge controller = fxmlLoader.getController();
+        controller.setPrimaryStage(primaryStage);
+        LOG.info("controller bridge set");
+        primaryStage.setScene(new Scene(root, 800, 500));
         LOG.info("root set ");
         primaryStage.show();
     }

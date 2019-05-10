@@ -4,14 +4,15 @@ import javafx.scene.control.*;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
+
 import java.util.Optional;
 
 /**
  * TODO: Complete the description of this class
  *
  * @author default author
- * @since 0.0.0.SNAPSHOT
  * @version 0.0.0
+ * @since 0.0.0.SNAPSHOT
  */
 public class MustaPane extends BorderPane {
 
@@ -54,6 +55,18 @@ public class MustaPane extends BorderPane {
      */
     public Menu addMenuGroup(String name) {
         Menu menu = new Menu(name);
+        menu.setId(name);
+        menuBar.getMenus().add(menu);
+        return menu;
+    }
+
+    /**
+     * Add menu group
+     *
+     * @param menu {@link Menu}
+     * @return Menu
+     */
+    public Menu addMenuGroup(Menu menu) {
         menuBar.getMenus().add(menu);
         return menu;
     }
@@ -61,15 +74,25 @@ public class MustaPane extends BorderPane {
     /**
      * Add menu item to group
      *
-     * @param itemName {@link String}
+     * @param itemName  {@link String}
+     * @param icon      {@link String}
      * @param groupName {@link String}
      * @return MenuItem
      */
-    public MenuItem addMenuItemToGroup(String itemName, String groupName) {
-        MenuItemWithIcon menuItem = new MenuItemWithIcon(itemName);
-        Optional<Menu> first = menuBar.getMenus().stream().filter(menu -> menu.getText().equals(groupName)).findFirst();
-        Menu menu;
-        menu = first.orElseGet(() -> addMenuGroup(groupName));
+    public MenuItem addMenuItemToGroup(String itemName, String icon, Menu groupName) {
+
+        MenuItemWithIcon menuItem;
+        if (icon != null) {
+            menuItem = new MenuItemWithIcon(itemName, icon);
+        } else {
+            menuItem = new MenuItemWithIcon(itemName);
+        }
+
+        Optional<Menu> first = menuBar.getMenus()
+                .stream()
+                .filter(menu -> menu.getId().equals(groupName.getId()))
+                .findFirst();
+        Menu menu = first.orElseGet(() -> addMenuGroup(groupName));
         menu.getItems().add(menuItem);
         return menuItem;
     }
@@ -77,24 +100,18 @@ public class MustaPane extends BorderPane {
     /**
      * Add menu item to group
      *
-     * @param itemName {@link String}
-     * @param icon {@link String}
+     * @param itemName  {@link String}
      * @param groupName {@link String}
      * @return MenuItem
      */
-    public MenuItem addMenuItemToGroup(String itemName, String icon, String groupName) {
-        MenuItemWithIcon menuItem = new MenuItemWithIcon(itemName, icon);
-        Optional<Menu> first = menuBar.getMenus().stream().filter(menu -> menu.getText().equals(groupName)).findFirst();
-        Menu menu;
-        menu = first.orElseGet(() -> addMenuGroup(groupName));
-        menu.getItems().add(menuItem);
-        return menuItem;
+    public MenuItem addMenuItemToGroup(String itemName, Menu groupName) {
+        return addMenuItemToGroup(itemName, null, groupName);
     }
 
     /**
      * Add menu item to group
      *
-     * @param menuItem {@link MenuItemWithIcon}
+     * @param menuItem  {@link MenuItemWithIcon}
      * @param groupName {@link String}
      * @return MenuItem
      */
@@ -106,16 +123,12 @@ public class MustaPane extends BorderPane {
         return menuItem;
     }
 
-    /**
-     * @param value Value to be assigned to the {@link #text} attribute.
-     */
+
     public void setText(String value) {
         textArea.setText(value);
     }
 
-    /**
-     * @param value Value to be assigned to the {@link #text} attribute.
-     */
+
     public void setText(Object value) {
         textArea.setText(String.valueOf(value));
     }
@@ -123,8 +136,8 @@ public class MustaPane extends BorderPane {
     /**
      * Add button
      *
-     * @param text {@link String}
-     * @param icon {@link String}
+     * @param text    {@link String}
+     * @param icon    {@link String}
      * @param toolTip {@link String}
      * @return CustomButton
      */

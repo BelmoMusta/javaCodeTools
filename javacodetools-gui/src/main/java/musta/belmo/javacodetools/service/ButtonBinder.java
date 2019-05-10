@@ -14,7 +14,7 @@ import javafx.scene.control.Button;
 public interface ButtonBinder {
 
     /**
-     * Bind service tu button
+     * Bind service to button
      *
      * @param button {@link Button}
      * @param toolService {@link AbstractJavaCodeTools}
@@ -22,7 +22,7 @@ public interface ButtonBinder {
     void bindServiceTuButton(Button button, AbstractJavaCodeTools toolService);
 
     /**
-     * Bind service tu button
+     * Bind service to button
      *
      * @param button {@link Button}
      * @param event {@link EventHandler}

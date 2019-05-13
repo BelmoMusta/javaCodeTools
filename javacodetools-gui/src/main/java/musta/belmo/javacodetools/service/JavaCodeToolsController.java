@@ -8,9 +8,9 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Menu;
 import javafx.scene.control.MenuItem;
 import javafx.scene.control.TextInputDialog;
-import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import musta.belmo.javacodetools.service.controls.CustomButton;
+import musta.belmo.javacodetools.service.controls.FileChooserDialog;
 import musta.belmo.javacodetools.service.controls.MustaPane;
 import musta.belmo.javacodetools.service.gui.PrimaryStageBridge;
 import musta.belmo.javacodetools.service.util.FileReaderTools;
@@ -55,17 +55,20 @@ public class JavaCodeToolsController implements ButtonBinder, PrimaryStageBridge
     }
 
     private void addMenus() {
-        final Menu file = mustaPane.addMenuGroup("File");
-        MenuItem open = mustaPane.addMenuItemToGroup("Open", file);
+        final Menu fileMenu = mustaPane.addMenuGroup("File");
+        final MenuItem open = mustaPane.addMenuItemToGroup("Open", fileMenu);
         open.setOnAction(event -> {
-            FileChooser fileChooser = new FileChooser();
-            File openedFile = fileChooser.showOpenDialog(null);
+            final FileChooserDialog fileChooser = new FileChooserDialog();
+            fileChooser.addExtensions("FFF", "java");
+            fileChooser.setType(FileChooserDialog.Type.FILE);
+            fileChooser.show();
+            final Optional<File> optionalFile = fileChooser.get();
             try {
-                if(openedFile!=null) {
-                    FileReaderTools.readFileToNode(openedFile, mustaPane.getTextArea());
-                    stage.setTitle(String.format("Code tools - %s", openedFile.getAbsolutePath()));
+                if (optionalFile.isPresent()) {
+                    final File file = optionalFile.get();
+                    FileReaderTools.readFileToNode(file, mustaPane.getTextArea());
+                    stage.setTitle(String.format("Code tools - %s", file.getAbsolutePath()));
                 }
-
             } catch (IOException e) {
                 LOG.error("File not found", e);
             }
@@ -73,32 +76,38 @@ public class JavaCodeToolsController implements ButtonBinder, PrimaryStageBridge
     }
 
     private void addInterfaceImplementorGenerator() {
-        CustomButton generateImplementation = mustaPane.addButton("Generate the implementation class", "fa-fire", "Generate Tests");
+        CustomButton generateImplementation = mustaPane.addButton("Generate the implementation class",
+                "fa-align-center", "Generate Tests");
         bindServiceTuButton(generateImplementation, new InterfaceImplementation());
     }
 
     private void addTestsGenerator() {
-        CustomButton generateTests = mustaPane.addButton("Generate tests for this class", "fa-fire", "Generate Tests");
+        CustomButton generateTests = mustaPane.addButton("Generate tests for this class", "fa-balance-scale",
+                "Generate Tests");
         bindServiceTuButton(generateTests, new TestGenerator());
     }
 
     private void addFieldsFromGetterGenerator() {
-        CustomButton generateFieldFromGetter = mustaPane.addButton("Generate Fields from getters", "fa-fire", "Generate Fileds");
+        CustomButton generateFieldFromGetter = mustaPane.addButton("Generate Fields from getters", "fa-ellipsis-v",
+                "Generate Fileds");
         bindServiceTuButton(generateFieldFromGetter, new FieldsFromGetters());
     }
 
     private void addSafeAccessorGenerator() {
-        CustomButton generateSafeAccessor = mustaPane.addButton("safe accessors", "fa-fire", "Generate safe accessors");
+        CustomButton generateSafeAccessor = mustaPane.addButton("safe accessors", "fa-exchange",
+                "Generate safe accessors");
         bindServiceTuButton(generateSafeAccessor, new ObjectSafeAccessor());
     }
 
     private void addOnDemandHolder() {
-        CustomButton generateOnDemandHolder = mustaPane.addButton("ODH pattern", "fa-fire", "Generate ODH pattern");
+        CustomButton generateOnDemandHolder = mustaPane.addButton("ODH pattern", "fa-xing",
+                "Generate ODH pattern");
         bindServiceTuButton(generateOnDemandHolder, new GenerateOnDemandHolderPattern());
     }
 
     private void addInterfaceDerivator() {
-        CustomButton deriveInterface = mustaPane.addButton("derive interface", "fa-fire", "Derive interface");
+        CustomButton deriveInterface = mustaPane.addButton("derive interface", "fa-renren",
+                "Derive interface");
         bindServiceTuButton(deriveInterface, new InterfaceDeriver());
     }
 

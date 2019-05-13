@@ -1,5 +1,7 @@
 package musta.belmo.javacodetools.service.controls;
 
+import javafx.collections.ObservableList;
+import javafx.scene.Node;
 import javafx.scene.control.*;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
@@ -37,12 +39,10 @@ public class MustaPane extends BorderPane {
     public MustaPane() {
         textArea = new TextArea();
         menuBar = new MenuBar();
-        final VBox top = new VBox();
-        final HBox menuBarBox = new HBox();
+
+        final HBox menuBarBox = new HBox(menuBar);
         buttonBox = new HBox();
-        menuBarBox.getChildren().add(menuBar);
-        top.getChildren().add(menuBarBox);
-        top.getChildren().add(buttonBox);
+        final VBox top = new VBox(menuBarBox,buttonBox);
         setTop(top);
         setCenter(textArea);
     }

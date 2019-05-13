@@ -30,7 +30,11 @@ public abstract class AbstractJavaFXApplication extends Application {
     /**
      * The {@link #LOG} Constant of type {@link Logger} holding the value LoggerFactory.getLogger(AbstractJavaFXApplication.class).
      */
-    private static final Logger LOG = LoggerFactory.getLogger(AbstractJavaFXApplication.class);
+    private static final Logger LOG = getLogger(AbstractJavaFXApplication.class);
+
+    public static Logger getLogger(Class cls) {
+        return LoggerFactory.getLogger(cls);
+    }
 
     /**
      * {@inheritDoc}

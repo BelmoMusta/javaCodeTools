@@ -59,18 +59,20 @@ public class JavaCodeToolsController implements ButtonBinder, PrimaryStageBridge
         final MenuItem open = mustaPane.addMenuItemToGroup("Open", fileMenu);
         open.setOnAction(event -> {
             final FileChooserDialog fileChooser = new FileChooserDialog();
-            fileChooser.addExtensions("FFF", "java");
             fileChooser.setType(FileChooserDialog.Type.FILE);
+            fileChooser.addExtensions("FFF", "java");
             fileChooser.show();
             final Optional<File> optionalFile = fileChooser.get();
-            try {
-                if (optionalFile.isPresent()) {
+
+            if (optionalFile.isPresent()) {
+                try {
                     final File file = optionalFile.get();
                     FileReaderTools.readFileToNode(file, mustaPane.getTextArea());
                     stage.setTitle(String.format("Code tools - %s", file.getAbsolutePath()));
+
+                } catch (IOException e) {
+                    LOG.error("File not found", e);
                 }
-            } catch (IOException e) {
-                LOG.error("File not found", e);
             }
         });
     }

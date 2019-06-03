@@ -44,10 +44,13 @@ public abstract class AbstractJavaFXApplication extends Application {
         LOG.info("start ");
         final FXMLLoader fxmlLoader = new FXMLLoader(loadFXMLFile());
         final Parent root = fxmlLoader.load();
+        Object controller = fxmlLoader.getController();
 
-        final PrimaryStageBridge controller = fxmlLoader.getController();
-        controller.setPrimaryStage(primaryStage);
-        LOG.info("controller bridge set");
+        if(controller instanceof PrimaryStageBridge){
+            ((PrimaryStageBridge) controller).setPrimaryStage(primaryStage);
+            LOG.info("controller bridge set");
+        }
+
         primaryStage.setScene(new Scene(root, 800, 500));
         LOG.info("root set ");
         primaryStage.show();

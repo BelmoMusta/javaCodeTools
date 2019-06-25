@@ -14,6 +14,7 @@ import musta.belmo.javacodetools.service.CodeUtils;
  * @since 0.0.0.SNAPSHOT
  * @version 0.0.0
  */
+@SuppressWarnings("all")
 public class InterfaceDeriverMethodsVisitor extends VoidVisitorAdapter<ClassOrInterfaceDeclaration> {
 
     /**

@@ -1,7 +1,5 @@
 package musta.belmo.javacodetools.service.controls;
 
-import javafx.collections.ObservableList;
-import javafx.scene.Node;
 import javafx.scene.control.*;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;

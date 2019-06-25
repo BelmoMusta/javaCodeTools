@@ -7,7 +7,7 @@
     <groupId>musta.belmo</groupId>
     <artifactId>javacodetools</artifactId>
     <version>1.0-SNAPSHOT</version>
-    <packaging>jar</packaging>
+    <packaging>pom</packaging>
 
     <modules>
         <module>javacodetools-service</module>

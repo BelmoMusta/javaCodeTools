@@ -23,6 +23,7 @@ import org.apache.commons.lang3.StringUtils;
  * @since 0.0.0.SNAPSHOT
  * @version 0.0.0
  */
+@SuppressWarnings("all")
 public class InterfaceImplementationVisitor extends VoidVisitorAdapter<CompilationUnit> {
 
     /**

@@ -14,12 +14,13 @@ import musta.belmo.javacodetools.service.CodeUtils;
  * @since 0.0.0.SNAPSHOT
  * @version 0.0.0
  */
+@SuppressWarnings("all")
 public class TestMethodsVisitor extends VoidVisitorAdapter<ClassOrInterfaceDeclaration> {
 
     /**
      * {@inheritDoc}
      */
-    @Override
+    @Override //NOSONAR
     public void visit(MethodDeclaration methodDeclaration, ClassOrInterfaceDeclaration arg) {
         if (!methodDeclaration.isPrivate()) {
             MethodDeclaration testMethod = new MethodDeclaration();

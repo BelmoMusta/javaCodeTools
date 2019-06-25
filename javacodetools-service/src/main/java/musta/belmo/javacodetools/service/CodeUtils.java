@@ -10,12 +10,14 @@ import com.github.javaparser.ast.type.ClassOrInterfaceType;
 import com.github.javaparser.ast.type.PrimitiveType;
 import com.github.javaparser.ast.type.Type;
 import org.apache.commons.lang3.StringUtils;
+
 import java.io.OutputStream;
 import java.io.PrintWriter;
 import java.util.*;
 import java.util.function.Predicate;
 import java.util.stream.IntStream;
 import java.util.stream.Stream;
+
 import static java.util.stream.Collectors.toCollection;
 
 /**
@@ -182,12 +184,12 @@ public class CodeUtils {
             }
         }
         ObjectCreationExpr creationExpr = new ObjectCreationExpr();
-        creationExpr.setType("StringBuilder");
+        creationExpr.setType(STRING_BUILDER);
         VariableDeclarationExpr variableDeclarationExpr = new VariableDeclarationExpr();
         VariableDeclarator variableDeclarator = new VariableDeclarator();
         variableDeclarationExpr.addVariable(variableDeclarator);
-        variableDeclarator.setName("lStringBuilder");
-        variableDeclarator.setType("StringBuilder");
+        variableDeclarator.setName("l"+STRING_BUILDER);
+        variableDeclarator.setType(STRING_BUILDER);
         AssignExpr objectCreationStmt = new AssignExpr(variableDeclarationExpr, creationExpr, AssignExpr.Operator.ASSIGN);
         System.out.println(objectCreationStmt);
         MethodCallExpr callStmt = createStringBuilderAppendStmt(literals);

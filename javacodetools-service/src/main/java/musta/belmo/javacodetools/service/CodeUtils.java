@@ -403,9 +403,7 @@ public class CodeUtils {
     public static String getTypeDefaultValue(PrimitiveType primitiveType) {
         String defaultValue;
         switch(primitiveType.getType()) {
-            case BOOLEAN:
-                defaultValue = "false";
-                break;
+
             case CHAR:
                 defaultValue = "'0'";
                 break;
@@ -425,9 +423,16 @@ public class CodeUtils {
                 defaultValue = "0f";
                 break;
             case DOUBLE:
-            default:
                 defaultValue = "0.0d";
                 break;
+            case BOOLEAN:
+            default: if("boolean".equals(primitiveType.toString())){
+                defaultValue = "false";
+            }
+            else {
+                defaultValue = "null";
+            }
+
         }
         return defaultValue;
     }

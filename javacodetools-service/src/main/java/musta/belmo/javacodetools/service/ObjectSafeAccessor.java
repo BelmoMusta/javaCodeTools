@@ -10,11 +10,14 @@ import com.github.javaparser.ast.stmt.ReturnStmt;
 import com.github.javaparser.ast.type.Type;
 import com.github.javaparser.ast.type.TypeParameter;
 
+import java.util.EnumSet;
 import java.util.List;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
 public class ObjectSafeAccessor extends AbstractJavaCodeTools {
+
+    private static final Predicate<MethodDeclaration> IS_PRIVATE = (MethodDeclaration::isPrivate);
 
     private FieldDeclaration createField(ClassOrInterfaceDeclaration srcClass, ClassOrInterfaceDeclaration destClass) {
         String srcClassName = srcClass.getNameAsString();
@@ -37,7 +40,10 @@ public class ObjectSafeAccessor extends AbstractJavaCodeTools {
             List<MethodDeclaration> methods = srcClass.findAll(MethodDeclaration.class).stream()
                     .filter(isStatic.negate()).collect(Collectors.toList());
 
-            methods.forEach(methodDeclaration -> {
+            methods.stream()
+                    .filter(IS_PRIVATE.negate())
+                    .forEach(methodDeclaration -> {
+                methodDeclaration.getAnnotationByName("Override").ifPresent(AnnotationExpr::remove);
                 MethodDeclaration addedMethod = methodDeclaration.clone();
                 destClass.addMember(addedMethod);
                 BlockStmt body = new BlockStmt();
@@ -48,6 +54,13 @@ public class ObjectSafeAccessor extends AbstractJavaCodeTools {
                 } else {
                     // add variable
                     NameExpr variableName = addVariable(methodDeclaration);
+                    VariableDeclarationExpr variableDeclarationExpr = new VariableDeclarationExpr();
+                    variableDeclarationExpr.setModifiers(EnumSet.of(Modifier.FINAL));
+                    VariableDeclarator variableDeclarator = new VariableDeclarator();
+                    variableDeclarator.setType(methodDeclaration.getType());
+                    variableDeclarator.setName(variableName.getName());
+                    variableDeclarationExpr.addVariable(variableDeclarator);
+                    body.addStatement(variableDeclarationExpr);
                     //add if statement
                     addIfStatementForGetters(field, methodDeclaration, body, variableName);
                     // add return statement
@@ -131,12 +144,11 @@ public class ObjectSafeAccessor extends AbstractJavaCodeTools {
     }
 
     private Expression getDefaultExpression(Type type) {
-        Expression expression;
+        final Expression expression;
 
-        boolean primitiveType = type.isPrimitiveType();
-        if (primitiveType && "boolean".equals(type.toString())) {
+        if ("boolean".equals(type.toString())) {
             expression = new NameExpr("false");
-        } else if (primitiveType) {
+        } else if (type.isPrimitiveType()) {
             expression = new NameExpr(CodeUtils.getTypeDefaultValue(type.asPrimitiveType()));
         } else {
             expression = new NullLiteralExpr();

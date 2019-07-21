@@ -29,6 +29,9 @@ import static java.util.stream.Collectors.toCollection;
  */
 public class CodeUtils {
 
+    private CodeUtils(){
+        super();
+    }
     /**
      * The {@link #STRING_BUILDER} Constant of type {@link String} holding the value {@value #STRING_BUILDER}.
      */
@@ -170,7 +173,7 @@ public class CodeUtils {
      *
      * @param expression {@link Expression}
      */
-    public static void concatenationToAppend(Expression expression) {
+    public static MethodCallExpr concatenationToAppend(Expression expression) {
         Expression temp = expression;
         LinkedList<Expression> literals = new LinkedList<>();
         while (temp.isBinaryExpr()) {
@@ -190,10 +193,8 @@ public class CodeUtils {
         variableDeclarationExpr.addVariable(variableDeclarator);
         variableDeclarator.setName("l"+STRING_BUILDER);
         variableDeclarator.setType(STRING_BUILDER);
-        AssignExpr objectCreationStmt = new AssignExpr(variableDeclarationExpr, creationExpr, AssignExpr.Operator.ASSIGN);
-        System.out.println(objectCreationStmt);
-        MethodCallExpr callStmt = createStringBuilderAppendStmt(literals);
-        System.out.println(callStmt);
+        return createStringBuilderAppendStmt(literals);
+
     }
 
     /**

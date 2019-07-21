@@ -21,8 +21,8 @@ import java.util.stream.Collectors;
  * TODO: Complete the description of this class
  *
  * @author default author
- * @since 0.0.0.SNAPSHOT
  * @version 0.0.0
+ * @since 0.0.0.SNAPSHOT
  */
 public class GenerateOnDemandHolderPattern extends AbstractJavaCodeTools {
 
@@ -35,7 +35,12 @@ public class GenerateOnDemandHolderPattern extends AbstractJavaCodeTools {
     public CompilationUnit generate(CompilationUnit compilationUnitSrc) {
         CompilationUnit compilationUnit = compilationUnitSrc.clone();
         List<ClassOrInterfaceDeclaration> classes = compilationUnit.findAll(ClassOrInterfaceDeclaration.class);
-        classes.stream().filter(aClass -> !aClass.isInterface()).filter(aClass -> !aClass.isInnerClass()).filter(aClass -> !aClass.isStatic()).filter(aClass -> !aClass.isPrivate()).filter(aClass -> !aClass.isAbstract()).forEach(this::addOnDemandHolderToClass);
+        classes.stream().filter(aClass -> !aClass.isInterface())
+                .filter(aClass -> !aClass.isInnerClass()
+                        && !aClass.isStatic()
+                        && !aClass.isPrivate()
+                        && !aClass.isAbstract())
+                .forEach(this::addOnDemandHolderToClass);
         return compilationUnit;
     }
 

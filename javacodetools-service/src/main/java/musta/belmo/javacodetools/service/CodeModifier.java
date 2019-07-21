@@ -9,6 +9,7 @@ import org.apache.commons.io.FileUtils;
 
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.util.List;
 import java.util.Optional;
 
@@ -44,28 +45,30 @@ public class CodeModifier extends AbstractJavaCodeTools {
 
     public static void main(String[] args) throws FileNotFoundException {
         CodeModifier codeModifier = new CodeModifier();
-        codeModifier.setCodeTransformer(file -> {
-            CompilationUnit parse = JavaParser.parse(file);
+        codeModifier.setCodeTransformer(CodeModifier::transformFile);
 
-            CompilationUnit clone = parse.clone();
-            List<ClassOrInterfaceDeclaration> all = clone.findAll(ClassOrInterfaceDeclaration.class);
-            for (ClassOrInterfaceDeclaration classOrInterfaceDeclaration : all) {
-                SingleMemberAnnotationExpr a = new SingleMemberAnnotationExpr();
-                a.setName("SuppressWarnings");
-                a.setMemberValue(new StringLiteralExpr("all"));
-                classOrInterfaceDeclaration.addAnnotation(a);
-            }
-
-            FileUtils.write(file, clone.toString(), "UTF-8");
-            return null;
-        });
-
-        File req = new File("D:\\COSY3_env_dev\\SRC\\ihub\\referentiel-ms\\document-contrat-eversuite-impl\\src\\main\\java\\com\\apicil\\cosy\\service\\ws\\gedeversuite\\skandia");
+        File req = new File("");
 
         for (File s : req.listFiles()) {
             if(s.isFile())
             codeModifier.generate(s);
         }
 
+    }
+
+    private static Void transformFile(File file) throws IOException {
+        CompilationUnit parse = JavaParser.parse(file);
+
+        CompilationUnit clone = parse.clone();
+        List<ClassOrInterfaceDeclaration> all = clone.findAll(ClassOrInterfaceDeclaration.class);
+        for (ClassOrInterfaceDeclaration classOrInterfaceDeclaration : all) {
+            SingleMemberAnnotationExpr a = new SingleMemberAnnotationExpr();
+            a.setName("SuppressWarnings");
+            a.setMemberValue(new StringLiteralExpr("all"));
+            classOrInterfaceDeclaration.addAnnotation(a);
+        }
+
+        FileUtils.write(file, clone.toString(), "UTF-8");
+        return null;
     }
 }

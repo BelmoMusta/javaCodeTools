@@ -13,7 +13,6 @@ import musta.belmo.javacodetools.service.visitor.FieldsFromGettersVisitor;
 public class FieldsFromGetters extends AbstractJavaCodeTools {
 
     /**
-     * TODO: Complete the description of this method
      *
      * @param compilationUnitSrc {@link CompilationUnit}
      * @return CompilationUnit

@@ -14,14 +14,15 @@ import com.github.javaparser.ast.stmt.ThrowStmt;
 import com.github.javaparser.ast.visitor.VoidVisitorAdapter;
 import musta.belmo.javacodetools.service.CodeUtils;
 
+import java.util.List;
+
 /**
  * TODO: Complete the description of this class
  *
  * @author default author
- * @since 0.0.0.SNAPSHOT
  * @version 0.0.0
+ * @since 0.0.0.SNAPSHOT
  */
-@SuppressWarnings("all")
 public class FieldsFromGettersVisitor extends VoidVisitorAdapter<CompilationUnit> {
 
     /**
@@ -31,41 +32,48 @@ public class FieldsFromGettersVisitor extends VoidVisitorAdapter<CompilationUnit
     public void visit(ClassOrInterfaceDeclaration aClass, CompilationUnit compilationUnit) {
         aClass.setInterface(false);
         aClass.setName(aClass.getNameAsString() + "Impl");
-        CodeUtils.reversedStream(aClass.findAll(MethodDeclaration.class).stream()).filter(CodeUtils.IS_GETTER).forEach(aMethod -> {
-            aMethod.setPublic(true);
-            String methodName = aMethod.getName().toString().substring(3);
-            FieldDeclaration fieldDeclaration = CodeUtils.newField(aMethod.getType(), "a" + methodName, Modifier.PRIVATE);
-            aClass.getMembers().add(0, fieldDeclaration);
-            ReturnStmt returnStmt = new ReturnStmt(fieldDeclaration.getVariable(0).getNameAsExpression());
-            BlockStmt blockStmt = new BlockStmt();
-            blockStmt.addStatement(returnStmt);
-            aMethod.setBody(blockStmt);
-            aClass.getMethodsByName("set" + methodName).forEach(setterMethod -> {
-                BlockStmt setterBlockStmt = new BlockStmt();
-                Expression assignStmt = new AssignExpr(fieldDeclaration.getVariables().get(0).getNameAsExpression(), setterMethod.getParameter(0).getNameAsExpression(), AssignExpr.Operator.ASSIGN);
-                setterBlockStmt.addStatement(assignStmt);
-                setterMethod.setBody(setterBlockStmt);
-            });
-        });
-        CodeUtils.reversedStream(aClass.findAll(MethodDeclaration.class).stream()).filter(CodeUtils.IS_BOOLEAN_ACCESSOR).forEach(booleanAccessor -> {
-            booleanAccessor.setPublic(true);
-            String methodName = booleanAccessor.getNameAsString().substring(2);
-            FieldDeclaration fieldDeclaration = CodeUtils.newField(booleanAccessor.getType(), "a" + methodName, Modifier.PRIVATE);
-            ReturnStmt returnStmt = new ReturnStmt(fieldDeclaration.getVariable(0).getNameAsExpression());
-            BlockStmt blockStmt = new BlockStmt();
-            blockStmt.addStatement(returnStmt);
-            booleanAccessor.setBody(blockStmt);
-        });
-        CodeUtils.reversedStream(aClass.findAll(MethodDeclaration.class).stream()).filter(CodeUtils.IS_NORMAL_METHOD).forEach(method -> {
-            method.setPublic(true);
-            BlockStmt body = new BlockStmt();
-            ThrowStmt throwExpression = new ThrowStmt();
-            ObjectCreationExpr expression = new ObjectCreationExpr();
-            expression.setType("UnsupportedOperationException");
-            throwExpression.setExpression(expression);
-            body.addStatement(throwExpression);
-            method.setBody(body);
-        });
+        List<MethodDeclaration> aClassAll = aClass.findAll(MethodDeclaration.class);
+
+
+        CodeUtils.reversedStream(aClassAll
+                .stream())
+                .forEach(method -> {
+
+                    method.setPublic(true);
+                    BlockStmt blockStmt = new BlockStmt();
+                    method.setBody(blockStmt);
+                    String methodName;
+
+                    if (CodeUtils.IS_GETTER.test(method)) {
+                        methodName = method.getName().toString().substring(3);
+                        FieldDeclaration fieldDeclaration = CodeUtils.newField(method.getType(), "a" + methodName, Modifier.PRIVATE);
+                        aClass.getMembers().add(0, fieldDeclaration);
+                        ReturnStmt returnStmt = new ReturnStmt(fieldDeclaration.getVariable(0).getNameAsExpression());
+                        blockStmt.addStatement(returnStmt);
+                        aClass.getMethodsByName("set" + methodName)
+                                .forEach(setterMethod -> {
+                                    BlockStmt setterBlockStmt = new BlockStmt();
+                                    Expression assignStmt = new AssignExpr(fieldDeclaration.getVariables().get(0).getNameAsExpression(), setterMethod.getParameter(0).getNameAsExpression(), AssignExpr.Operator.ASSIGN);
+                                    setterBlockStmt.addStatement(assignStmt);
+                                    setterMethod.setBody(setterBlockStmt);
+                                });
+
+                    } else if (CodeUtils.IS_BOOLEAN_ACCESSOR.test(method)) {
+
+                        methodName = method.getNameAsString().substring(2);
+                        FieldDeclaration fieldDeclaration = CodeUtils.newField(method.getType(), "a" + methodName, Modifier.PRIVATE);
+                        ReturnStmt returnStmt = new ReturnStmt(fieldDeclaration.getVariable(0).getNameAsExpression());
+                        blockStmt.addStatement(returnStmt);
+                    } else {
+                        ThrowStmt throwExpression = new ThrowStmt();
+                        ObjectCreationExpr expression = new ObjectCreationExpr();
+                        expression.setType("UnsupportedOperationException");
+                        throwExpression.setExpression(expression);
+                        blockStmt.addStatement(throwExpression);
+                    }
+
+                });
+
         super.visit(aClass, compilationUnit);
     }
 }

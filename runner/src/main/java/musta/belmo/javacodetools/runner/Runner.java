@@ -6,6 +6,6 @@ import musta.belmo.javacodetools.service.gui.JavaCodeToolsGUI;
 public class Runner {
 
     public static void main(String[] args) {
-        new Thread(() -> Application.launch(JavaCodeToolsGUI.class)).start();
+        Application.launch(JavaCodeToolsGUI.class,args);
     }
 }

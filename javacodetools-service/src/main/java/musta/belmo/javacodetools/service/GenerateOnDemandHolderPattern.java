@@ -27,7 +27,6 @@ import java.util.stream.Collectors;
 public class GenerateOnDemandHolderPattern extends AbstractJavaCodeTools {
 
     /**
-     * TODO: Complete the description of this method
      *
      * @param compilationUnitSrc {@link CompilationUnit}
      * @return CompilationUnit

@@ -12,6 +12,7 @@
     <modules>
         <module>javacodetools-service</module>
         <module>javacodetools-gui</module>
+        <module>runner</module>
     </modules>
 
     <build>

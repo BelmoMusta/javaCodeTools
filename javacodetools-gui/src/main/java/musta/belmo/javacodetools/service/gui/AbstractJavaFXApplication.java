@@ -30,7 +30,7 @@ public abstract class AbstractJavaFXApplication extends Application {
     /**
      * The {@link #LOG} Constant of type {@link Logger} holding the value LoggerFactory.getLogger(AbstractJavaFXApplication.class).
      */
-    private static final Logger LOG = getLogger(AbstractJavaFXApplication.class);
+    private static  Logger LOG = getLogger(AbstractJavaFXApplication.class);
 
     public static Logger getLogger(Class cls) {
         return LoggerFactory.getLogger(cls);
@@ -41,6 +41,7 @@ public abstract class AbstractJavaFXApplication extends Application {
      */
     @Override
     public void start(Stage primaryStage) throws IOException {
+        LOG = getLogger(getClass());
         LOG.info("start ");
         final FXMLLoader fxmlLoader = new FXMLLoader(loadFXMLFile());
         final Parent root = fxmlLoader.load();

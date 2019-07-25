@@ -50,15 +50,24 @@ public class JavaCodeToolsController implements ButtonBinder, PrimaryStageBridge
         addSafeAccessorGenerator();
         addFieldsFromGetterGenerator();
         addTestsGenerator();
+        addInstanceGenerator();
         addInterfaceImplementorGenerator();
         addClassBuilder();
         addMenus();
     }
 
+
     private void addClassBuilder() {
         CustomButton builderGenerator = mustaPane.addButton("Generate the builder",
                 "fa-align-center", "Generate builder");
         bindServiceTuButton(builderGenerator, new ClassBuilder());
+    }
+
+    private void addInstanceGenerator() {
+        CustomButton generateTests = mustaPane.addButton("Genertate the instance for this class", "fa-balance-scale",
+                "Generate InstanceGenerator");
+        bindServiceTuButton(generateTests, new InstanceGenerator());
+
     }
 
     private void addMenus() {

@@ -16,12 +16,13 @@ public class InstanceGeneratorVisitor extends VoidVisitorAdapter<BlockStmt> {
     private String classType;
     @Override
     public void visit(FieldDeclaration fieldDeclaration, BlockStmt arg) {
-
-        final VariableDeclarator variableDeclarator = fieldDeclaration.getVariables().get(0);
-        Expression nullLiteral = new NullLiteralExpr();
-        final MethodCallExpr call = new MethodCallExpr(
-                new NameExpr(StringUtils.uncapitalize(classType)), "set"+StringUtils.capitalize(variableDeclarator.getNameAsString()), new NodeList<>(nullLiteral));
-        arg.addAndGetStatement(call);
+        if(!fieldDeclaration.isStatic()) {
+            final VariableDeclarator variableDeclarator = fieldDeclaration.getVariables().get(0);
+            Expression nullLiteral = new NullLiteralExpr();
+            final MethodCallExpr call = new MethodCallExpr(
+                    new NameExpr(StringUtils.uncapitalize(classType)), "set" + StringUtils.capitalize(variableDeclarator.getNameAsString()), new NodeList<>(nullLiteral));
+            arg.addAndGetStatement(call);
+        }
         super.visit(fieldDeclaration, arg);
     }
 

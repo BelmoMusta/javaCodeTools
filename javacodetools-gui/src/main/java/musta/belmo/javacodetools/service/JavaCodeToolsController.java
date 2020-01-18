@@ -51,6 +51,7 @@ public class JavaCodeToolsController implements ButtonBinder, PrimaryStageBridge
         addFieldsFromGetterGenerator();
         addTestsGenerator();
         addInstanceGenerator();
+        addHibernateAnnotationsTransformer();
         addInterfaceImplementorGenerator();
         addClassBuilder();
         addMenus();
@@ -67,6 +68,13 @@ public class JavaCodeToolsController implements ButtonBinder, PrimaryStageBridge
         CustomButton generateTests = mustaPane.addButton("Genertate the instance for this class", "fa-balance-scale",
                 "Generate InstanceGenerator");
         bindServiceTuButton(generateTests, new InstanceGenerator());
+
+    }
+
+    private void addHibernateAnnotationsTransformer() {
+        CustomButton generateTests = mustaPane.addButton("Hibernate annotation on fields", "fa-balance-scale",
+                "HBT");
+        bindServiceTuButton(generateTests, new HibernateAnnotationsTransformer());
 
     }
 

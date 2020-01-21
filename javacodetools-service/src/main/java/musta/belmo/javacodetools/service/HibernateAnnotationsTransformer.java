@@ -1,10 +1,16 @@
 package musta.belmo.javacodetools.service;
 
 import com.github.javaparser.ast.CompilationUnit;
-import com.github.javaparser.ast.body.ClassOrInterfaceDeclaration;
-import musta.belmo.javacodetools.service.visitor.HibernateVisitor;
+import com.github.javaparser.ast.body.FieldDeclaration;
+import com.github.javaparser.ast.body.MethodDeclaration;
+import com.github.javaparser.ast.body.VariableDeclarator;
+import com.github.javaparser.ast.nodeTypes.NodeWithName;
 
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.Iterator;
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * Generates Fields from gettes
@@ -21,8 +27,63 @@ public class HibernateAnnotationsTransformer extends AbstractJavaCodeTools {
      */
     public CompilationUnit generate(CompilationUnit compilationUnitSrc) {
         CompilationUnit compilationUnit = compilationUnitSrc.clone();
+        CompilationUnit clone = compilationUnit.clone();
+        List<MethodDeclaration> methodDeclarations = clone.findAll(MethodDeclaration.class);
+        List<FieldDeclaration> fields = clone.findAll(FieldDeclaration.class);
 
-       compilationUnit.accept(new HibernateVisitor(), compilationUnit);
-        return compilationUnit;
+        Iterator<MethodDeclaration> iterator = methodDeclarations.iterator();
+        while (iterator.hasNext()) {
+            final MethodDeclaration aMethod = iterator.next();
+            if (CodeUtils.isGetter(aMethod) || CodeUtils.isIs(aMethod)) {
+                if (hasHibernateAnnotations(aMethod)) {
+                    MethodDeclaration setterMethod = getSetterMethod(aMethod, methodDeclarations);
+                    moveAnnotationsToField(aMethod, fields);
+                    aMethod.remove();
+                    setterMethod.remove();
+                }
+            }
+        }
+
+        return clone;
+    }
+
+    private void moveAnnotationsToField(MethodDeclaration aMethod, List<FieldDeclaration> fields) {
+        final FieldDeclaration fieldDeclaration = getFieldFromMethod(aMethod, fields);
+        if (fieldDeclaration != null) {
+            aMethod.getAnnotations().forEach(fieldDeclaration::addAnnotation);
+        }
+    }
+
+    private FieldDeclaration getFieldFromMethod(MethodDeclaration aMethod, List<FieldDeclaration> fields) {
+        return fields.stream()
+                .filter(fieldDeclaration -> {
+                    VariableDeclarator variableDeclarator = fieldDeclaration.getVariables().get(0);
+                    boolean findSetterFromGetter = variableDeclarator.getNameAsString().equals(CodeUtils.toLowerCaseFirstLetter(aMethod.getNameAsString().substring(3)));
+                    boolean findSetterFromIs = variableDeclarator.getNameAsString().equals(CodeUtils.toLowerCaseFirstLetter(aMethod.getNameAsString().substring(2)));
+                    return findSetterFromGetter || findSetterFromIs;
+                })
+                .findFirst()
+                .orElse(null);
+    }
+
+    private MethodDeclaration getSetterMethod(MethodDeclaration aMethod, List<MethodDeclaration> methodDeclarations) {
+        return methodDeclarations.stream()
+                .filter(methodDeclaration -> {
+                    final String nameAsString = methodDeclaration.getNameAsString();
+                    final boolean findSetterFromGetter = nameAsString.equals("set" + aMethod.getNameAsString().substring(3));
+                    final boolean findSetterFromIs = nameAsString.equals("set" + aMethod.getNameAsString().substring(2));
+                    return findSetterFromGetter || findSetterFromIs;
+                })
+                .findFirst()
+                .orElse(aMethod);
+    }
+
+    private boolean hasHibernateAnnotations(MethodDeclaration aMethod) {
+        final List<String> hibernateAnnotations = Arrays.asList("Enumerated", "Column", "Id", "OneToOne", "ManyToMany", "OneToMany", "ManyToOne");
+        final List<String> annotations = aMethod.getAnnotations().stream()
+                .map(NodeWithName::getNameAsString)
+                .collect(Collectors.toList());
+        return !Collections.disjoint(hibernateAnnotations, annotations);
+
     }
 }
